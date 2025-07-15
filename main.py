@@ -5,7 +5,7 @@
 from mcp.server.fastmcp import FastMCP
 import datetime
 
-mcp = FastMCP(name="indiecloud-mcp")
+mcp = FastMCP(name="indiecloud-mcp", host="0.0.0.0", port=8000)
 
 
 @mcp.tool()
