@@ -4,12 +4,15 @@
 
 from mcp.server.fastmcp import FastMCP
 import datetime
+from pydantic import Field
 
 mcp = FastMCP(name="indiecloud-mcp", host="0.0.0.0", port=8000)
 
 
 @mcp.tool()
-def get_device_status(device_id: str) -> dict:
+def get_device_status(
+    device_id: str = Field(description="设备ID"),
+) -> dict:
     # 示例数据，实际可接入工业物联网平台API
     return {
         "device_id": device_id,
@@ -19,7 +22,10 @@ def get_device_status(device_id: str) -> dict:
 
 
 @mcp.tool()
-def get_operating_metrics(device_id: str, metric: str) -> dict:
+def get_operating_metrics(
+    device_id: str = Field(description="设备ID"),
+    metric: str = Field(description="指标"),
+) -> dict:
     metrics = {"temperature": 75, "vibration": 0.02, "power": 1200}
     return {
         "device_id": device_id,
@@ -30,7 +36,10 @@ def get_operating_metrics(device_id: str, metric: str) -> dict:
 
 
 @mcp.tool()
-def diagnose_fault(device_id: str, fault_code: str) -> dict:
+def diagnose_fault(
+    device_id: str = Field(description="设备ID"),
+    fault_code: str = Field(description="故障代码"),
+) -> dict:
     suggestions = {
         "E101": "检查冷却系统是否堵塞",
         "E202": "振动过大，建议检修轴承",
@@ -44,7 +53,9 @@ def diagnose_fault(device_id: str, fault_code: str) -> dict:
 
 
 @mcp.tool()
-def maintenance_schedule(device_id: str) -> dict:
+def maintenance_schedule(
+    device_id: str = Field(description="设备ID"),
+) -> dict:
     return {
         "device_id": device_id,
         "next_maintenance": "2025-08-01",
@@ -54,7 +65,9 @@ def maintenance_schedule(device_id: str) -> dict:
 
 
 @mcp.tool()
-def maintenance_history(device_id: str) -> dict:
+def maintenance_history(
+    device_id: str = Field(description="设备ID"),
+) -> dict:
     # 模拟的历史数据（实际应从数据库查询）
     history = [
         {"date": "2025-06-01", "engineer": "张工", "content": "更换润滑油"},
