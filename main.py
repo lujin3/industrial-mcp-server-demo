@@ -5,14 +5,14 @@
 from mcp.server.fastmcp import FastMCP
 import datetime
 from pydantic import Field
+from pathlib import Path
 
-mcp = FastMCP(name="indiecloud-mcp", host="0.0.0.0", port=8000)
+# 创建 MCP 服务器实例
+mcp = FastMCP(name="indiecloud-mcp", host="0.0.0.0", port=8000, version="1.0.0")
 
 
-@mcp.tool()
-def get_device_status(
-    device_id: str = Field(description="设备ID"),
-) -> dict:
+@mcp.tool(description="获取设备状态和基本信息")
+def get_device_status(device_id: str = Field(description="设备ID，如 D-1001")) -> dict:
     # 示例数据，实际可接入工业物联网平台API
     return {
         "device_id": device_id,
@@ -21,11 +21,15 @@ def get_device_status(
     }
 
 
-@mcp.tool()
+@mcp.tool(description="获取设备运行指标数据")
 def get_operating_metrics(
     device_id: str = Field(description="设备ID"),
-    metric: str = Field(description="指标"),
+    metric: str = Field(
+        description="指标类型: temperature(温度), vibration(振动), power(功率)"
+    ),
 ) -> dict:
+    """获取设备的具体运行指标"""
+
     metrics = {"temperature": 75, "vibration": 0.02, "power": 1200}
     return {
         "device_id": device_id,
@@ -35,10 +39,10 @@ def get_operating_metrics(
     }
 
 
-@mcp.tool()
+@mcp.tool(description="诊断设备故障并提供解决方案")
 def diagnose_fault(
     device_id: str = Field(description="设备ID"),
-    fault_code: str = Field(description="故障代码"),
+    fault_code: str = Field(description="故障代码，如 E101, E202, E303"),
 ) -> dict:
     suggestions = {
         "E101": "检查冷却系统是否堵塞",
@@ -52,7 +56,7 @@ def diagnose_fault(
     }
 
 
-@mcp.tool()
+@mcp.tool(description="查询设备维护计划")
 def maintenance_schedule(
     device_id: str = Field(description="设备ID"),
 ) -> dict:
@@ -64,7 +68,7 @@ def maintenance_schedule(
     }
 
 
-@mcp.tool()
+@mcp.tool(description="查询设备历史维护记录")
 def maintenance_history(
     device_id: str = Field(description="设备ID"),
 ) -> dict:
