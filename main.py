@@ -2,13 +2,15 @@
 
 # pip install mcp
 
+import os
 from mcp.server.fastmcp import FastMCP
 import datetime
 from pydantic import Field
 from pathlib import Path
 
 # 创建 MCP 服务器实例
-mcp = FastMCP(name="indiecloud-mcp", host="0.0.0.0", port=8000, version="1.0.0")
+port = int(os.getenv("PORT", 8000))
+mcp = FastMCP(name="indiecloud-mcp", host="0.0.0.0", port=port)
 
 
 @mcp.tool(description="获取设备状态和基本信息")
