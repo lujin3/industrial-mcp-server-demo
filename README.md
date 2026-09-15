@@ -59,6 +59,7 @@ PORT=9000 python main.py
 ## 💡 使用场景示例
 
 ### 1. 设备状态查询
+> 用户：查询设备 D-1001 的状态
 ```json
 // 请求
 {
@@ -75,6 +76,7 @@ PORT=9000 python main.py
 ```
 
 ### 2. 性能指标查询
+> 用户：D-1001 当前温度是多少？
 ```json
 // 请求
 {
@@ -93,6 +95,7 @@ PORT=9000 python main.py
 ```
 
 ### 3. 故障诊断与解决方案
+> 用户：设备 D-1001 报故障码 E101 怎么解决？
 ```json
 // 请求
 {
@@ -105,6 +108,24 @@ PORT=9000 python main.py
   "fault_code": "E101",
   "diagnosis": "冷却系统可能堵塞",
   "solution": "检查冷却液流量，清洁冷却器"
+}
+```
+
+### 4. 维护计划查询
+> 用户：D-1001 下次什么时候维护？
+```json
+// 请求
+{
+  "tool": "maintenance_schedule",
+  "params": {"device_id": "D-1001"}
+}
+
+// 响应
+{
+  "device_id": "D-1001",
+  "next_maintenance": "2025-08-01",
+  "responsible": "张工",
+  "notes": "注意润滑油更换"
 }
 ```
 
