@@ -18,7 +18,7 @@
 
 ### 安装依赖
 ```bash
-pip install mcp
+pip install -r requirements.txt
 ```
 
 ### 启动服务
@@ -44,6 +44,17 @@ PORT=9000 python main.py
 | `diagnose_fault` | 设备故障智能诊断 | `device_id: str`<br>`fault_code: str` | `{diagnosis, solution}` |
 | `maintenance_schedule` | 查询下次维护计划 | `device_id: str` | `{schedule_date, responsible}` |
 | `maintenance_history` | 获取维护历史记录 | `device_id: str` | `[{date, maintenance_type}]` |
+
+### 工具标注（ToolAnnotations）
+
+所有工具统一标注以下属性，便于 LLM 准确判断调用安全性：
+
+| 标注 | 值 | 含义 |
+|------|------|------|
+| `read_only_hint` | `true` | 仅读取，不改变状态 |
+| `destructive_hint` | `false` | 非破坏性操作 |
+| `idempotent_hint` | `true` | 幂等，重复调用结果一致 |
+| `open_world_hint` | `false` | 不与外部世界交互 |
 
 ## 💡 使用场景示例
 
@@ -99,11 +110,9 @@ PORT=9000 python main.py
 
 ## 📐 技术架构
 
-- **框架**：FastMCP 1.20.0 - 轻量级 MCP 实现
-- **协议**：Model Context Protocol (MCP) - 标准化的 AI 应用接口
-- **数据格式**：JSON - 结构化数据交互
-- **传输方式**：Streamable HTTP - 支持流式响应
-- **部署模式**：即插即用的 Python 服务
+本项目基于 [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk) 的 `MCPServer` 实现，通过 `streamable-http` 传输协议对外提供标准化的 MCP 接口，可无缝集成到支持 MCP 的 LLM 应用中。
+
+服务器实例声明了 `description` 与 `instructions`，便于客户端在握手阶段获取服务能力概览与使用约束。
 
 ### 支持的性能指标
 

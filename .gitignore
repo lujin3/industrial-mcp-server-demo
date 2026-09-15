@@ -97,6 +97,7 @@ celerybeat.pid
 
 # Environments
 .env
+.env.local
 .venv
 env/
 venv/
@@ -128,3 +129,7 @@ dmypy.json
 *.swp
 *.swo
 *~
+
+# OS
+.DS_Store
+Thumbs.db
